@@ -1,0 +1,28 @@
+
+
+.main__bgImage img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+.profileInfo {
+    display: flex;
+    margin-bottom: 50px;
+}
+.profileInfo__image img {
+    width: 150px;
+    height: 150px;
+}
+.infoProfile {
+    margin-left: 20px;
+    flex-direction: column;
+}
+.infoProfile__name {
+    margin-bottom: 40px;
+}
+
+.posts__title {
+    margin-bottom: 50px;
+    font-size: 30px;
+}
