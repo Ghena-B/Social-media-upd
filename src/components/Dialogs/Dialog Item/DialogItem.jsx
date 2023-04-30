@@ -5,8 +5,16 @@ const DialogItem = (props) => {
 
     let path = "/dialogs/" + props.id;
     return (
-        <div className={s.dialog + " " + s.active}>
-            <NavLink to={path}>{props.user}</NavLink></div>
+        <NavLink to={path} style={{textDecoration:'none'}}>
+            <div className={s.dialog + " " + s.active}>
+                <div className={s.image}>
+                    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt=""/>
+                </div>
+                <div className={s.text}>{props.user}</div>
+
+            </div>
+        </NavLink>
+
     )
 }
 

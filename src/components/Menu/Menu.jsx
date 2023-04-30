@@ -2,7 +2,7 @@ import s from './Menu.module.css';
 import {NavLink} from "react-router-dom";
 import ActiveUsers from "../ActiveUsers/ActiveUsers";
 
-const Menu = () => {
+const Menu = (props) => {
     return (
         <div className={s.menu}>
             <ul>
@@ -12,7 +12,7 @@ const Menu = () => {
                 <li><NavLink to="/music" className={({ isActive }) => isActive ? s.active : s.menu }>Music</NavLink></li>
                 <li><NavLink to="/settings" className={({ isActive }) => isActive ? s.active : s.menu }>Settings</NavLink></li>
             </ul>
-            <ActiveUsers/>
+            <ActiveUsers state={props.state.activeUsers}/>
         </div>
     )
 };

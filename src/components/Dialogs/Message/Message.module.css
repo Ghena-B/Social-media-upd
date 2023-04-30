@@ -1,3 +1,17 @@
-.messages {
-    padding: 10px;
+.message {
+    display: flex;
+    align-items: flex-end;
+    column-gap: 3px;
+    margin: 20px 15px;
+}
+.image img {
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.text {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 4px;
 }
