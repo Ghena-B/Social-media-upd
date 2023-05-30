@@ -1,8 +1,17 @@
 import s from './Header.module.css';
-const Header = () => {
+import {NavLink} from "react-router-dom";
+
+const Header = (props) => {
     return (
         <div className={s.header}>
-            <a href="#"><img src="https://www.freepnglogos.com/uploads/company-logo-png/company-logo-transparent-png-19.png" alt=""/></a>
+            <div className={s.header_logo}>
+                <a href="#"><img
+                    src="https://www.freepnglogos.com/uploads/company-logo-png/company-logo-transparent-png-19.png"
+                    alt=""/></a>
+            </div>
+            <div className={s.authorize}>
+                {props.isAuthorized ?<div>Hello {props.login}</div> : <NavLink to='/login'>Login </NavLink>}
+            </div>
         </div>
     )
 };

@@ -1,6 +1,11 @@
 import s from './ProfileInfo.module.css';
+import Preloader from "../../common/Preloader/Preloader";
 
-const ProfileInfo = () => {
+const ProfileInfo = (props) => {
+    if (!props.profile) {
+        return <Preloader/>
+    }
+    let contactsElement = Object.entries(props.profile.contacts);
     return (
         <div>
             <div className={s.main__bgImage}>
@@ -10,11 +15,29 @@ const ProfileInfo = () => {
             </div>
             <div className={s.profileInfo}>
                 <div className={s.profileInfo__image}>
-                    <img src="https://i.pinimg.com/474x/97/aa/84/97aa847d061a14894178805f1d551500.jpg" alt=""/>
+                    <img src={props.profile.photos.large || 'https://www.asiamediajournal.com/wp-content/uploads/2022/11/Default-PFP-1200x1200.jpg'} alt=""/>
                 </div>
                 <div className={`${s.profileInfo__info} ${s.infoProfile}`}>
-                    <div className={s.infoProfile__name}>Ghena B</div>
-                    <div className={s.infoProfile__contact}>future web developer <br/> city: Ungheni <br/> age: 24</div>
+                    <div className={s.infoProfile__name}>{props.profile.fullName}</div>
+                    <div className={s.infoProfile__about}>{props.profile.aboutMe}</div>
+                    <div className={s.infoProfile__job}>{props.profile.lookingForAJobDescription} <br/> city:
+                        Ungheni <br/> age: 24
+                    </div>
+                    <div className={s.infoProfile__contact}>
+                        {contactsElement.map(([key, value]) => {
+                                if (value === null) {
+                                    return null;
+                                }
+                                return (
+                                    <div key={key}>
+                                        <strong>{key}: </strong>
+                                        <span>
+                                            <a href="{value}">{value}</a></span>
+                                    </div>
+                                )
+                            }
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

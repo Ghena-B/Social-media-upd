@@ -1,7 +1,16 @@
-.header {
+.header_logo {
     grid-area: header;
     background-color: #30944d;
+
 }
-.header img {
+.header_logo img {
     width: 80px;
+}
+
+.authorize {
+
+}
+.header {
+    display: flex;
+    justify-content: space-between;
 }
