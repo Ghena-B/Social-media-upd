@@ -1,11 +1,11 @@
+import {authApi, followApi} from "../api/api";
+import {followSuccess, toggleFollowingProgress} from "./users-reducer";
+
 const SET_USER_DATA = 'SET_USER_DATA';
 
 
 let initialState = {
-        userID: null,
-        email: null,
-        login: null,
-        isAuthorized: false
+    userID: null, email: null, login: null, isAuthorized: false
 
 };
 
@@ -14,9 +14,7 @@ const authReducer = (state = initialState, action) => {
 
         case SET_USER_DATA:
             return {
-                ...state,
-                ...action.data,
-                isAuthorized: true
+                ...state, ...action.data, isAuthorized: true
             }
         default:
             return state;
@@ -25,8 +23,18 @@ const authReducer = (state = initialState, action) => {
 
 export let setAuthUserData = (userID, email, login) => {
     return {
-        type: SET_USER_DATA,
-        data: {userID, email, login}
+        type: SET_USER_DATA, data: {userID, email, login}
+    }
+};
+
+export let getAuthUserData = () => {
+    return (dispatch) => {
+        authApi.authMe().then((data) => {
+            if (data.resultCode === 0) {
+                let {id, email, login} = data.data
+                dispatch(setAuthUserData(id, email, login))
+            }
+        })
     }
 };
 
