@@ -15,7 +15,7 @@ let Users = (props) => {
     return (
         <div>
             {slicedPages.map(p => {
-                return <span onClick={(e) => {props.onPageChanged(p)}} className={props.currentPage === p && s.selectedPage}> {p}</span>
+                return <span onClick={(e) => {props.onPageChanged(p)}} className={props.currentPage === p ? s.selectedPage : 'error'}> {p}</span>
             })}
             {
                 props.users.map(u => <div key={u.id}>

@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import Header from "./components/Header/Header";
+
 import Menu from "./components/Menu/Menu";
 import News from "./components/News/News";
 import Music from "./components/Music/Music";
@@ -10,28 +10,48 @@ import DialogsContainer from "./components/Dialogs/DialogsContainer";
 import UsersContainer from "./components/Users/UsersContainer";
 import ProfileContainer from "./components/Profile/ProfileContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
+import LoginContainer from "./components/Login/LoginContainer";
+import {Component} from "react";
+import {connect} from "react-redux";
+import {initializeApp} from "./redux/app-reducer";
+import {compose} from "redux";
+import Preloader from "./components/common/Preloader/Preloader";
 
 
-const App = () => {
-
-    return (
-        <BrowserRouter>
-            <div className="App">
-                <HeaderContainer/>
-                <Menu />
-                <div className='main'>
-                    <Routes>
-                        <Route path="/profile/:userId?" element={<ProfileContainer />}/>
-                        <Route path="/dialogs/*" element={<DialogsContainer />}/>
-                        <Route path="/news" element={<News/>}/>
-                        <Route path="/music" element={<Music/>}/>
-                        <Route path="/settings" element={<Settings/>}/>
-                        <Route path="/users" element={<UsersContainer/>}/>
-                    </Routes>
+class App extends Component {
+    componentDidMount() {
+        this.props.initializeApp()
+    }
+    render() {
+       if (!this.props.initSuccess){
+            return <Preloader/>
+        }
+        return (
+            <BrowserRouter>
+                <div className="App">
+                    <HeaderContainer/>
+                    <Menu/>
+                    <div className='main'>
+                        <Routes>
+                            <Route path="/profile/:userId?" element={<ProfileContainer/>}/>
+                            <Route path="/dialogs/*" element={<DialogsContainer/>}/>
+                            <Route path="/news" element={<News/>}/>
+                            <Route path="/music" element={<Music/>}/>
+                            <Route path="/settings" element={<Settings/>}/>
+                            <Route path="/users" element={<UsersContainer/>}/>
+                            <Route path="/login" element={<LoginContainer/>}/>
+                        </Routes>
+                    </div>
                 </div>
-            </div>
-        </BrowserRouter>
-    )
+            </BrowserRouter>
+        )
+    }
+}
+const mapStateToProps = (state) => {
+    return {
+        initSuccess: state.app.initializeSuccess
+    }
 };
-
-export default App;
+export default compose(
+    connect(mapStateToProps, {initializeApp})
+)(App);

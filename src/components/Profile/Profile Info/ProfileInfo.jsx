@@ -1,5 +1,7 @@
 import s from './ProfileInfo.module.css';
 import Preloader from "../../common/Preloader/Preloader";
+import ProfileStatus from "./Profile Status/ProfileStatus";
+import ProfileStatusWithHooks from "./Profile Status/ProfileStatusWithHooks";
 
 const ProfileInfo = (props) => {
     if (!props.profile) {
@@ -18,6 +20,7 @@ const ProfileInfo = (props) => {
                     <img src={props.profile.photos.large || 'https://www.asiamediajournal.com/wp-content/uploads/2022/11/Default-PFP-1200x1200.jpg'} alt=""/>
                 </div>
                 <div className={`${s.profileInfo__info} ${s.infoProfile}`}>
+                    <ProfileStatusWithHooks status={props.status} updateStatus={props.updateStatus}/>
                     <div className={s.infoProfile__name}>{props.profile.fullName}</div>
                     <div className={s.infoProfile__about}>{props.profile.aboutMe}</div>
                     <div className={s.infoProfile__job}>{props.profile.lookingForAJobDescription} <br/> city:
