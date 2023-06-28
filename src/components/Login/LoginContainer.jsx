@@ -5,7 +5,8 @@ import {login, setError} from "../../redux/auth-reducer";
 let mapStateToProps = (state) => {
     return {
         isAuth: state.auth.isAuthorized,
-        errorMessage: state.auth.errorMessage
+        errorMessage: state.auth.errorMessage,
+        captcha: state.auth.captchaUrl,
     }
 };
 

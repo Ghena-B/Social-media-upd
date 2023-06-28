@@ -33,8 +33,8 @@ export const authApi = {
             return response.data
         })
     },
-    login(email, password, rememberMe = false) {
-        return instance.post(`auth/login`, {email, password, rememberMe}).then((response) => {
+    login(email, password, rememberMe = false, captcha = null) {
+        return instance.post(`auth/login`, {email, password, rememberMe, captcha}).then((response) => {
             return response.data
         })
     },
@@ -60,6 +60,24 @@ export const profileApi = {
         return instance.put(`profile/status/`, {status: status}).then((response) => {
             return response.data
         })
+    },
+    updatePhoto(file) {
+        const formData = new FormData();
+        formData.append("selectedFile", file)
+        return instance.put(`profile/photo/`, formData, {headers: { "Content-Type": "multipart/form-data"}}).then((response) => {
+            return response.data
+        })
+    },
+    updateUserInfo(data) {
+        return instance.put(`profile`, data).then((response) => {
+            return response.data
+        })
     }
 };
-
+export const securityApi = {
+    getCaptchaUrl() {
+        return instance.get(`security/get-captcha-url`).then((response) => {
+            return response.data
+        })
+    },
+};
