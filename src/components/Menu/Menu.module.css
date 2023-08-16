@@ -1,0 +1,16 @@
+.menu{
+    grid-area: menu;
+    height: 100vh;
+    background-color: #30944d;
+}
+.menu li {
+    list-style: none;
+}
+.menu a {
+    color: #fff;
+    text-decoration: none;
+    line-height: 1.8;
+}
+.menu a.active {
+    color: gold;
+}
