@@ -1,7 +1,3 @@
-import {InferActionsTypes} from "./redux-store";
-import {actions} from "./profile-reducer";
-
-
 let initialState = {
     activeUsers: [
         {
@@ -18,12 +14,12 @@ let initialState = {
     ] as Array<ActiveUsersType>
 };
 
-const sidebarReducer = (state = initialState, action: ActionsType): InitialStateType => {
+const sidebarReducer = (state = initialState): InitialStateType => {
     return state;
 }
 export default sidebarReducer;
 
-export type ActionsType = InferActionsTypes<typeof actions>
+
 type InitialStateType = typeof initialState;
 export type ActiveUsersType = {
     id: number

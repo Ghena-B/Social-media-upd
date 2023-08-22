@@ -18,7 +18,7 @@ import Preloader from "./components/common/Preloader/Preloader";
 import ErrorTestComponent from "./components/errorTestComponent/errorTestComponent";
 import Menu from "./components/Menu/Menu";
 
-const UsersContainer = lazy(() => import('./components/Users/UsersContainer'));
+const UsersPage = lazy(() => import('./components/Users/UsersContainer'));
 const DialogsContainer = lazy(() => import('./components/Dialogs/DialogsContainer'));
 const LoginContainer = lazy(() => import('./components/Login/LoginContainer'));
 
@@ -52,7 +52,7 @@ class App extends Component<MapPropsType & DispatchPropsType, any> {
                 <Route path="/news" element={<News/>}/>
                 <Route path="/music" element={<Music/>}/>
                 <Route path="/settings" element={<Settings/>}/>
-                <Route path="/users" element={<UsersContainer/>}/>
+                <Route path="/users" element={<UsersPage/>}/>
                 <Route path="/login" element={<LoginContainer/>}/>
                 <Route path="*" element={<div>404 Not found</div>}/>
               </Routes>

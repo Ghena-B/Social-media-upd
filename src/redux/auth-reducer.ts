@@ -1,7 +1,8 @@
 import {authApi} from "../api/authApi";
 import {securityApi} from "../api/securityApi";
 import {ResultCodes, ResultCodesWithCaptcha} from "../api/api";
-import {BaseThunkType, InferActionsTypes} from "./redux-store";
+import {AppStateType, BaseThunkType, InferActionsTypes} from "./redux-store";
+import {ThunkDispatch} from "redux-thunk";
 
 
 let initialState = {
@@ -48,7 +49,7 @@ export const actions = {
     }
 }
 
-export let getAuthUserData = (): ThunkType => async (dispatch: any) => {
+export let getAuthUserData = (): ThunkType => async (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>) => {
     let data = await authApi.authMe();
     if (data.resultCode === ResultCodes.Success) {
         let {id, email, login} = data.data
@@ -57,7 +58,7 @@ export let getAuthUserData = (): ThunkType => async (dispatch: any) => {
 };
 
 export let login = (email: string, password: string, rememberMe: boolean, captcha: string): ThunkType => {
-    return async (dispatch) => {
+    return async (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>) => {
         let data = await authApi.login(email, password, rememberMe, captcha);
         if (data.resultCode === ResultCodes.Success) {
             await dispatch(getAuthUserData())
