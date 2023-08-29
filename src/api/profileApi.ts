@@ -1,12 +1,8 @@
 import {ApiResponseType, instance, ResultCodes} from "./api";
 import {PhotosType, ProfileType} from "../APItypes/APItypes";
 
-
-type UpdatePhotoApiResponseType = {
-    photos: PhotosType
-}
 export const profileApi = {
-    getProfile(userId:number) {
+    getProfile(userId: number) {
         return instance.get(`profile/${userId}`).then((response: { data: ProfileType; }) => {
             return response.data as ProfileType
         })
@@ -34,3 +30,7 @@ export const profileApi = {
         })
     }
 };
+
+type UpdatePhotoApiResponseType = {
+    photos: PhotosType
+}

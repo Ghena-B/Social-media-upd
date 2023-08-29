@@ -6,7 +6,6 @@ const ProfileUserDataForm = ({profile, editModeOff, updateProfileInfo}) => {
     const onSubmit = data => {
         updateProfileInfo(data);
         editModeOff();
-        console.log(data)
     }
     return <form onSubmit={handleSubmit(onSubmit)} action="" name='profile-form'>
         <div>

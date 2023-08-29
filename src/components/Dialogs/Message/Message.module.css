@@ -5,8 +5,8 @@
     margin: 20px 15px;
 }
 .image img {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     object-fit: cover;
     border-radius: 50%;
 }

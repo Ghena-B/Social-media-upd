@@ -1,15 +1,5 @@
 import {ApiResponseType, instance, ResultCodes, ResultCodesWithCaptcha} from "./api";
 
-type AuthMeApiResponseType = {
-    id: number
-    email: string
-    login: string
-}
-type LoginApiResponseType = {
-    email: string
-    password: string
-    rememberMe: boolean
-}
 export const authApi = {
     authMe() {
         return instance.get(`auth/me`).then((response: {data: ApiResponseType<ResultCodes, AuthMeApiResponseType>}) => {
@@ -26,4 +16,15 @@ export const authApi = {
             return response.data as ApiResponseType<{}, ResultCodes>
         })
     }
+}
+
+type AuthMeApiResponseType = {
+    id: number
+    email: string
+    login: string
+}
+type LoginApiResponseType = {
+    email: string
+    password: string
+    rememberMe: boolean
 }

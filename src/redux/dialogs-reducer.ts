@@ -47,4 +47,5 @@ export type DialogsType = {
 export type MessagesType = {
     id: number
     message: string
+
 }

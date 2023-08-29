@@ -60,9 +60,11 @@ export const actions = {
 }
 
 export const getProfile = (userId: number | null): ThunkType => {
-    return async (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>) => {
+    return async (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>, getState) => {
         if (!userId) {
-            userId = 29145
+            //userId = 29145
+            dispatch(actions.setError("Invalid User ID"));
+            return;
         }
         let data = await profileApi.getProfile(userId);
         dispatch(actions.setUserProfile(data));
@@ -71,6 +73,10 @@ export const getProfile = (userId: number | null): ThunkType => {
 
 export const getStatus = (userId: number): ThunkType => {
     return async (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>) => {
+        if (!userId) {
+            dispatch(actions.setError("Invalid User ID"));
+            return;
+        }
         let data = await profileApi.getStatus(userId);
         dispatch(actions.setUserStatus(data));
     }
@@ -99,8 +105,10 @@ export const updateProfileInfo = (profile: ProfileType): ThunkType => {
         let data = await profileApi.updateUserInfo(profile);
         if (data.resultCode === 0) {
             await dispatch(getProfile(userId));
+            return Promise.resolve();
         } else {
             dispatch(actions.setError(data.messages[0]))
+            return Promise.reject(data.messages[0]);
         }
     }
 };

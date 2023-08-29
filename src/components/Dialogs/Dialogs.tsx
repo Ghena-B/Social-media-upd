@@ -1,45 +1,80 @@
 import s from './Dialogs.module.css';
-import DialogItem from "./Dialog Item/DialogItem";
 import Message from "./Message/Message";
-import React from "react";
-import {DialogsType, MessagesType} from "../../redux/dialogs-reducer";
+import React, {useEffect, useRef, useState} from "react";
 import AddMessageForm from "../Forms/AddMessageForm";
+import {useDispatch, useSelector} from "react-redux";
+import {AppStateType} from "../../redux/redux-store";
+import {sendMessage, startMessagesListening, stopMessagesListening} from "../../redux/chat-reducer";
+import {ChatMessageAPIType} from '../../api/chatApi';
 
-type PropsType = {
-    newMessageText: string
-    dialogs: Array<DialogsType>
-    messages: Array<MessagesType>
-    sendMessage: (newMessageText: string) => void
+type ChatMessagesType = {
+    message: string,
+    photo: string,
+    userId: number,
+    userName: string
 }
-const Dialogs: React.FC<PropsType> = (props) => {
 
-    let dialogsElement = props.dialogs.map(d => <DialogItem user={d.user} key={d.id} id={d.id}/>);
-    let messagesElement = props.messages.map(m => <Message message={m.message} key={m.id}/>);
+const Dialogs: React.FC = React.memo((props) => {
+    const dispatch = useDispatch();
+    const status = useSelector((state: AppStateType) => state.chatPage.status);
+    const isMounted = useRef(true);
+
+    useEffect(() => {
+        dispatch(startMessagesListening());
+        return () => {
+            if (isMounted.current) {
+                console.log("Cleaning up...");
+                dispatch(stopMessagesListening());
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            isMounted.current = false;
+        }
+    }, []);
+
+    const addMessage = (message: ChatMessageAPIType) => {
+        dispatch(sendMessage(message));
+    }
 
     return (
         <div className={s.dialogs}>
-            <div className={s.dialogItem}>
-                {dialogsElement}
-            </div>
+            {status === 'error' && <div>Some error occured. Please refresh the page</div>}
             <div className={s.messages}>
-                <div className={s.user}>
-                    <div className={s.image}><img
-                        src="https://t4.ftcdn.net/jpg/01/18/03/35/360_F_118033506_uMrhnrjBWBxVE9sYGTgBht8S5liVnIeY.jpg"
-                        alt=""/></div>
-                    <div className={s.username}></div>
-                </div>
-                <div className={s.message}>{messagesElement}</div>
-                <div className={s.response}>Raspuns 1</div>
-                <div className={s.response}>Raspuns 2</div>
-                <div className={s.response}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci deleniti
-                    dolore earum est fuga inventore iure laborum modi neque nisi, obcaecati quaerat reiciendis rem
-                    repudiandae sint tempore velit voluptatem voluptatum.
-                </div>
-                <AddMessageForm sendMessage={props.sendMessage}/>
+                <Messages/>
+                <AddMessageForm addMessage={addMessage}/>
             </div>
-
         </div>
     )
-};
+})
 export default Dialogs;
 
+const Messages: React.FC = React.memo(() => {
+    const messages: ChatMessagesType[] = useSelector((state: AppStateType) => state.chatPage.messages)
+    const messagesAnchorRef = useRef<HTMLDivElement>(null);
+    const [isAutoScroll, setIsAutoScroll] = useState(true)
+
+    const scrollHandler = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+        const element = e.currentTarget;
+        if (Math.abs( (element.scrollHeight - element.scrollTop) - element.clientHeight ) < 300)
+        {
+            !isAutoScroll && setIsAutoScroll(true)
+        } else {
+            isAutoScroll && setIsAutoScroll(false)
+        }
+    }
+    useEffect(() => {
+        if (isAutoScroll) {
+            messagesAnchorRef.current?.scrollIntoView({behavior: 'smooth'})
+        }
+    }, [messages])
+
+    let messagesElement = messages.map((m, index) => <Message message={m.message} key={index} photo={m.photo} userName={m.userName}/>);
+
+    return <div style={{overflowY: 'auto'}} onScroll={scrollHandler} className={s.message}>
+        {messagesElement}
+        <div ref={messagesAnchorRef}></div>
+    </div>
+});

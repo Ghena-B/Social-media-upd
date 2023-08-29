@@ -15,73 +15,74 @@ import {compose} from "redux";
 
 import store, {AppStateType} from "./redux/redux-store";
 import Preloader from "./components/common/Preloader/Preloader";
-import ErrorTestComponent from "./components/errorTestComponent/errorTestComponent";
 import Menu from "./components/Menu/Menu";
+import {chatApi} from "./api/chatApi";
+import Chat from "./components/Chat/Chat";
 
 const UsersPage = lazy(() => import('./components/Users/UsersContainer'));
-const DialogsContainer = lazy(() => import('./components/Dialogs/DialogsContainer'));
 const LoginContainer = lazy(() => import('./components/Login/LoginContainer'));
 
 class App extends Component<MapPropsType & DispatchPropsType, any> {
-  catchAllUnhandledErrors = (e: PromiseRejectionEvent) => {
-    alert("Some error occurred");
-  }
-  componentDidMount() {
-    this.props.initializeApp()
-    window.addEventListener("unhandledrejection", this.catchAllUnhandledErrors);
-  }
-  componentWillUnmount() {
-    window.removeEventListener("unhandledrejection", this.catchAllUnhandledErrors);
-  }
 
-  render() {
-    if (!this.props.initSuccess) {
-      return <Preloader/>
+    componentDidMount() {
+        this.props.initializeApp()
+        chatApi.start()
     }
-    return (
-        <div className="App">
-          <HeaderContainer/>
-          <ErrorTestComponent/>
-          <Menu/>
-          <div className='main'>
-            <Suspense fallback={<div>...Loading</div>}>
-              <Routes>
-                <Route path="/" element={<Navigate to="/profile" />} />
-                <Route path="/profile/:userId?" element={<ProfileContainer/>}/>
-                <Route path="/dialogs/*" element={<DialogsContainer/>}/>
-                <Route path="/news" element={<News/>}/>
-                <Route path="/music" element={<Music/>}/>
-                <Route path="/settings" element={<Settings/>}/>
-                <Route path="/users" element={<UsersPage/>}/>
-                <Route path="/login" element={<LoginContainer/>}/>
-                <Route path="*" element={<div>404 Not found</div>}/>
-              </Routes>
-            </Suspense>
-          </div>
-        </div>
-    )
-  }
+
+    componentWillUnmount() {
+        chatApi.stop();
+    }
+
+    render() {
+        if (!this.props.initSuccess) {
+            return <Preloader/>
+        }
+        return (
+            <div className="App">
+                <HeaderContainer/>
+                <Menu/>
+                <div className='main'>
+                    <Suspense fallback={<div>...Loading</div>}>
+                        <Routes>
+                            <Route path="/" element={<Navigate to="/profile"/>}/>
+                            <Route path="/profile/:userId?" element={<ProfileContainer/>}/>
+                            <Route path="/news" element={<News/>}/>
+                            <Route path="/music" element={<Music/>}/>
+                            <Route path="/settings" element={<Settings/>}/>
+                            <Route path="/users" element={<UsersPage/>}/>
+                            <Route path="/login" element={<LoginContainer/>}/>
+                            <Route path="/chat" element={<Chat/>}/>
+                            <Route path="*" element={<div>404 Not found</div>}/>
+                        </Routes>
+                    </Suspense>
+                </div>
+            </div>
+        )
+    }
 }
 
 const mapStateToProps = (state: AppStateType) => {
-  return {
-    initSuccess: state.app.initializeSuccess
-  }
+    return {
+        initSuccess: state.app.initializeSuccess
+    }
 };
+
 let AppContainer = compose(
     connect(mapStateToProps, {initializeApp})
 )(App);
 
 let SocialNetworkApp = () => {
-  return <BrowserRouter>
-    <Provider store={store}>
-      <AppContainer/>
-    </Provider>
-  </BrowserRouter>
+    return <BrowserRouter>
+        <Provider store={store}>
+            <AppContainer/>
+        </Provider>
+    </BrowserRouter>
 };
 
 export default SocialNetworkApp;
+
 type MapPropsType = ReturnType<typeof mapStateToProps>
+
 type DispatchPropsType = {
-  initializeApp: () => void
+    initializeApp: () => void
 }

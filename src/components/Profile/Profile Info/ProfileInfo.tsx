@@ -1,7 +1,7 @@
 import s from './ProfileInfo.module.css';
 import Preloader from "../../common/Preloader/Preloader";
 import ProfileStatusWithHooks from "./Profile Status/ProfileStatusWithHooks";
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import ProfileUserDataForm from "../../Forms/ProfileUserDataForm";
 import {ProfileType} from "../../../APItypes/APItypes";
 type PropsType = {
@@ -15,13 +15,16 @@ type PropsType = {
 
 const ProfileInfo: React.FC<PropsType> = (props) => {
     const {profile, status, isOwner, updateProfilePhoto, updateStatus, updateProfileInfo} = props;
-    let [editMode, setEditMode] = useState(false);
+    let [editMode, setEditMode] = useState(isOwner);
     let editModeOn = () => {
         setEditMode(true)
     };
     let editModeOff = () => {
         setEditMode(false);
     };
+    useEffect(() => {
+    }, [isOwner]);
+
     if (!profile) {
         return <Preloader/>
     }

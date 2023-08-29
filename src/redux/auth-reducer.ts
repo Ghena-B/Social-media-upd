@@ -25,6 +25,8 @@ const authReducer = (state = initialState, action: ActionsType): InitialStateTyp
             return {
                 ...state, errorMessage: action.errorMessage
             }
+        case 'AUTH/RESET_STATE':
+            return initialState;
         default:
             return state;
     }
@@ -45,6 +47,11 @@ export const actions = {
     getCaptchaUrlSuccess: (captchaUrl: string) => {
         return {
             type: 'AUTH/GET_CAPTCHA_URL_SUCCESS', data: {captchaUrl}
+        } as const
+    },
+    resetAuthState: () => {
+        return {
+            type: 'AUTH/RESET_STATE'
         } as const
     }
 }
@@ -75,7 +82,7 @@ export let logout = (): ThunkType => {
     return async (dispatch) => {
         const data = await authApi.logout();
         if (data.resultCode === ResultCodes.Success) {
-            dispatch(actions.setAuthUserData(null, null, null, false))
+            dispatch(actions.resetAuthState())
         }
     }
 };
@@ -86,6 +93,7 @@ export let getCaptchaUrl = (): ThunkType => {
             dispatch(actions.getCaptchaUrlSuccess(data.data.url))
     }
 };
+
 
 export default authReducer;
 

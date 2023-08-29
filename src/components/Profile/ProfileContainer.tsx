@@ -1,78 +1,75 @@
-import React from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import Profile from "./Profile";
-import {connect} from "react-redux";
-import {compose} from "redux";
-import {withRouter} from "../../hoc/WithRouter";
 import {getProfile, getStatus, updateProfileInfo, updateProfilePhoto, updateStatus} from "../../redux/profile-reducer";
-import {AppStateType} from "../../redux/redux-store";
 import {ProfileType} from "../../APItypes/APItypes";
+import {withRouter} from "../../hoc/WithRouter";
+import {useEffect} from "react";
+import {AppStateType} from "../../redux/redux-store";
 
+const ProfileContainer = (props: PropsType) => {
+    const profile = useSelector((state: AppStateType) => state.profilePage.profile);
+    const status = useSelector((state: AppStateType) => state.profilePage.status);
+    const authUserId = useSelector((state: AppStateType) => state.auth.userId);
+    const dispatch = useDispatch();
 
-class ProfileContainer extends React.Component<PropsType> {
-    componentDidMount() {
-        const userId = this.props.router.params.userId;
-        if (!userId) {
-            if (!this.props.authUserId) return
-
-            this.props.router.navigate(`/profile/${this.props.authUserId}`)
-        } else {
-            this.props.getProfile(userId)
-            this.props.getStatus(userId)
+    const { router } = props;
+    const update = async (profile: ProfileType) => {
+        try {
+            await dispatch(updateProfileInfo(profile));
+        } catch (error) {
+            console.error("Failed to update profile:", error);
         }
-    }
-    componentDidUpdate(prevProps: PropsType) {
-        const userId = this.props.router.params.userId;
-        if (this.props.authUserId !== prevProps.authUserId) {
-            this.props.router.navigate(`/profile/${this.props.authUserId}`)
-        } else if (userId !== prevProps.router.params.userId) {
-            this.props.getProfile(userId)
-            this.props.getStatus(userId)
-        }
-    }
-    render() {
-        const isOwner = this.props.router.params.userId == this.props.authUserId;
-        return (
-            <Profile
-                {...this.props}
-                profile={this.props.profile}
-                status={this.props.status}
-                updateStatus={this.props.updateStatus}
-                updateProfilePhoto={this.props.updateProfilePhoto}
-                isOwner={isOwner}
-                updateProfileInfo={this.props.updateProfileInfo}
-            />
-        )
-    }
+    };
 
+    useEffect(() => {
+        updateProfile();
+    }, [authUserId, router.params.userId]);
+
+    const updateProfile = () => {
+        const userIdFromParams = router.params.userId;
+
+        if (userIdFromParams) {
+            dispatch(getProfile(userIdFromParams));
+            dispatch(getStatus(userIdFromParams));
+            return;
+        }
+
+        if (authUserId) {
+            router.navigate(`/profile/${authUserId}`);
+            return;
+        }
+
+        router.navigate('/login');
+    };
+
+    const isOwner = Number(router.params.userId) === Number(authUserId);
+    return (
+        <Profile
+            {...props}
+            profile={profile}
+            status={status}
+            updateStatus={(status: string) => dispatch(updateStatus(status))}
+            updateProfilePhoto={(file: File) => dispatch(updateProfilePhoto(file))}
+            isOwner={isOwner}
+            updateProfileInfo={update}
+        />
+    );
 }
 
-let mapStateToProps = (state: AppStateType) => {
-    return {
-        profile: state.profilePage.profile,
-        status: state.profilePage.status,
-        authUserId: state.auth.userId
-    }
-}
+export default withRouter(ProfileContainer);
 
-export default compose<React.ComponentType>(
-    connect(mapStateToProps, {getProfile, getStatus, updateStatus, updateProfilePhoto, updateProfileInfo}),
-    withRouter,
-)(ProfileContainer)
-
-type MapStatePropsType = {
+type PropsType = {
     profile: ProfileType | null
     status: string
     authUserId: number | null
-}
-type MapDispatchPropsType = {
+    isOwner: boolean,
+    router: RouterType
     getProfile: (userId: number) => void
     getStatus: (userId: number) => void
     updateStatus: (status: string) => void
     updateProfilePhoto: (file: File) => void
-    updateProfileInfo: (profile: ProfileType) => Promise<any>
+    updateProfileInfo: (profile: ProfileType) => Promise<void>
 }
-type OwnPropsType = {isOwner: boolean, router: RouterType}
-type PropsType = MapStatePropsType & MapDispatchPropsType & OwnPropsType;
 
 type RouterType = {
     params: {

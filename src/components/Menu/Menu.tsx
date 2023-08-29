@@ -9,14 +9,13 @@ const Menu: React.FC = () => {
             <ul>
                 <li><NavLink to="/profile" className={({isActive}) => isActive ? s.active : s.menu}>Profile</NavLink>
                 </li>
-                <li><NavLink to="/dialogs" className={({isActive}) => isActive ? s.active : s.menu}>Messages</NavLink>
+                <li><NavLink to="/chat" className={({isActive}) => isActive ? s.active : s.menu}>Chat</NavLink>
                 </li>
                 <li><NavLink to="/news" className={({isActive}) => isActive ? s.active : s.menu}>News</NavLink></li>
                 <li><NavLink to="/music" className={({isActive}) => isActive ? s.active : s.menu}>Music</NavLink></li>
                 <li><NavLink to="/settings" className={({isActive}) => isActive ? s.active : s.menu}>Settings</NavLink>
                 </li>
-                <li><NavLink to="/users" className={({isActive}) => isActive ? s.active : s.menu}>Users</NavLink>
-                </li>
+                <li><NavLink to="/users" className={({isActive}) => isActive ? s.active : s.menu}>Users</NavLink></li>
             </ul>
             <ActiveUsersContainer/>
         </div>

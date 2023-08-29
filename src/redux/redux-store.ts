@@ -6,6 +6,7 @@ import usersReducer from "./users-reducer";
 import authReducer from "./auth-reducer";
 import thunkMiddleware, {ThunkAction} from "redux-thunk";
 import appReducer from "./app-reducer";
+import chatReducer from "./chat-reducer";
 
 let reducers = combineReducers({
     profilePage: profileReducer,
@@ -14,6 +15,7 @@ let reducers = combineReducers({
     usersPage: usersReducer,
     auth: authReducer,
     app: appReducer,
+    chatPage: chatReducer
 })
 type RootReducersType = typeof reducers;
 export type AppStateType = ReturnType<RootReducersType>
@@ -26,7 +28,7 @@ const store = createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddle
 window.__store__ = store
 export type InferActionsTypes<T> = T extends { [keys: string]: (...args: any[]) => infer U } ? U : never
 
-export type BaseThunkType<A extends Action = Action, R = Promise<void>> = ThunkAction<R, AppStateType, unknown, A>
+export type BaseThunkType<A extends Action = Action, R = void | Promise<void>> = ThunkAction<R, AppStateType, unknown, A>
 
 export default store;
 

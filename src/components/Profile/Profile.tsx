@@ -1,5 +1,3 @@
-import s from './Profile.module.css';
-
 import MyPostsContainer from "./My Posts/MyPostsContainer";
 import {ProfileType} from "../../APItypes/APItypes";
 import React from "react";
@@ -14,6 +12,7 @@ type PropsType = {
     updateProfileInfo: (profile: ProfileType) => Promise<any>
 }
 const Profile: React.FC<PropsType> = (props) => {
+
     return (
         <div>
             <ProfileInfo profile={props.profile}
@@ -23,7 +22,7 @@ const Profile: React.FC<PropsType> = (props) => {
                          isOwner={props.isOwner}
                          updateProfileInfo={props.updateProfileInfo}
             />
-            <MyPostsContainer isOwner={props.isOwner} />
+            {props.isOwner && <MyPostsContainer isOwner={props.isOwner}/>}
         </div>
     )
 };

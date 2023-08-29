@@ -1,5 +1,4 @@
 import {UsersType} from "../redux/users-reducer";
-
 import {default as axios} from "axios";
 
 export enum ResultCodes {

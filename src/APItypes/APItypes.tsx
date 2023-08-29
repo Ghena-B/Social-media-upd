@@ -3,6 +3,7 @@ export type PostsType = {
     message: string
     likesCount: string
 }
+
 export type ProfileType = {
     userId?: number | null | undefined
     lookingForAJob?: boolean | undefined
@@ -12,6 +13,7 @@ export type ProfileType = {
     photos?: PhotosType
     aboutMe?: string
 }
+
 export type ContactsType = {
     github: string
     vk: string
@@ -22,6 +24,7 @@ export type ContactsType = {
     youtube: string
     mainLink: string
 }
+
 export type PhotosType = {
     small: string
     large: string
