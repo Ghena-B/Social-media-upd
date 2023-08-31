@@ -9,7 +9,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {getPageSize} from "../../redux/users-selectors";
 import {AppStateType} from "../../redux/redux-store";
 
-const {Header, Sider, Content} = Layout;
+const {Header} = Layout;
 
 type PropsType = {
     isAuthorized: boolean
