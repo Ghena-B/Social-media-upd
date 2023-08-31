@@ -6,7 +6,7 @@ type PropsType = {
 }
 let ActiveUser: React.FC<PropsType> = (props) => {
     return (
-        <div >
+        <div>
             <div className={s.user}>
                 <div className={s.image}>
                     <img src={props.src} alt=""/>
@@ -14,7 +14,6 @@ let ActiveUser: React.FC<PropsType> = (props) => {
                 </div>
                 <div className={s.name}>{props.name}</div>
             </div>
-
         </div>)
 };
 export default ActiveUser;

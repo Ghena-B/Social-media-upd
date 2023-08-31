@@ -22,7 +22,6 @@ const Profile: React.FC<PropsType> = (props) => {
                          isOwner={props.isOwner}
                          updateProfileInfo={props.updateProfileInfo}
             />
-            {props.isOwner && <MyPostsContainer isOwner={props.isOwner}/>}
         </div>
     )
 };

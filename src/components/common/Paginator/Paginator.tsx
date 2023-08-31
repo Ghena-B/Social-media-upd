@@ -1,7 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
-import { usePagination, DOTS } from './usePagination';
+import {usePagination, DOTS} from './usePagination';
 import './pagination.css';
+
 type PropsType = {
     onPageChange: (page: number | typeof DOTS) => void
     totalCount: number
@@ -11,7 +12,7 @@ type PropsType = {
     className?: string
 }
 
-const Pagination: React.FC<PropsType> = (props )  => {
+const Pagination: React.FC<PropsType> = (props) => {
     const {
         onPageChange,
         totalCount,
@@ -51,15 +52,16 @@ const Pagination: React.FC<PropsType> = (props )  => {
                 })}
                 onClick={onPrevious}
             >
-                <div className="arrow left" />
+                <div className="arrow left"/>
             </li>
-            {paginationRange.map(pageNumber => {
+            {paginationRange.map((pageNumber, index) => {
                 if (pageNumber === DOTS) {
-                    return <li className="pagination-item dots">&#8230;</li>;
+                    return <li key={`dots-${index}`} className="pagination-item dots">&#8230;</li>;
                 }
 
                 return (
                     <li
+                        key={pageNumber}
                         className={classnames('pagination-item', {
                             selected: pageNumber === currentPage
                         })}
@@ -75,7 +77,7 @@ const Pagination: React.FC<PropsType> = (props )  => {
                 })}
                 onClick={onNext}
             >
-                <div className="arrow right" />
+                <div className="arrow right"/>
             </li>
         </ul>
     );

@@ -2,23 +2,65 @@ import s from './Menu.module.css';
 import {NavLink} from "react-router-dom";
 import ActiveUsersContainer from "../ActiveUsers/ActiveUsersContainer";
 import React from "react";
+import {
+    ContainerOutlined,
+    MessageOutlined, SoundOutlined,
+    ToolOutlined,
+    UploadOutlined, UsergroupAddOutlined,
+    UserOutlined,
+    VideoCameraOutlined
+} from "@ant-design/icons";
+import {Menu} from "antd";
+import {useSelector} from "react-redux";
+import {AppStateType} from "../../redux/redux-store";
 
-const Menu: React.FC = () => {
+type PropsType = {
+    collapsed: boolean
+}
+const MenuOwn: React.FC<PropsType> = (props) => {
+    const isAuth = useSelector((state: AppStateType) => state.auth.isAuthorized)
     return (
-        <div className={s.menu}>
-            <ul>
-                <li><NavLink to="/profile" className={({isActive}) => isActive ? s.active : s.menu}>Profile</NavLink>
-                </li>
-                <li><NavLink to="/chat" className={({isActive}) => isActive ? s.active : s.menu}>Chat</NavLink>
-                </li>
-                <li><NavLink to="/news" className={({isActive}) => isActive ? s.active : s.menu}>News</NavLink></li>
-                <li><NavLink to="/music" className={({isActive}) => isActive ? s.active : s.menu}>Music</NavLink></li>
-                <li><NavLink to="/settings" className={({isActive}) => isActive ? s.active : s.menu}>Settings</NavLink>
-                </li>
-                <li><NavLink to="/users" className={({isActive}) => isActive ? s.active : s.menu}>Users</NavLink></li>
-            </ul>
-            <ActiveUsersContainer/>
+        <div style={{height: "calc(100vh - 64px)"}}>
+            <Menu
+                theme="dark"
+                mode="inline"
+                defaultSelectedKeys={['1']}
+                items={[
+                    {
+                        key: '1',
+                        icon: <UserOutlined/>,
+                        label: <NavLink to="/profile">Profile</NavLink>,
+                    },
+                    {
+                        key: '2',
+                        icon: <MessageOutlined />,
+                        label: <NavLink to="/chat">Chat</NavLink>,
+                    },
+                    {
+                        key: '3',
+                        icon: <ContainerOutlined />,
+                        label: <NavLink to="/news">News</NavLink>,
+                    },
+                    {
+                        key: '4',
+                        icon: <SoundOutlined />,
+                        label: <NavLink to="/music">Music</NavLink>,
+                    },
+                    {
+                        key: '5',
+                        icon: <ToolOutlined />,
+                        label: <NavLink to="/settings">Settings</NavLink>,
+                    },
+                    {
+                        key: '6',
+                        icon: <UsergroupAddOutlined />,
+                        label: <NavLink to="/users">Users</NavLink>,
+                    },
+                ]}
+            />
+            {isAuth && <ActiveUsersContainer collapsed={props.collapsed}/>}
         </div>
+
     )
 };
-export default Menu;
+export default MenuOwn;

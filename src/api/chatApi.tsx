@@ -12,7 +12,7 @@ const notifySubscribers = (eventName: EventsNamesType, payload: any) => {
 
 const closeHandler = () => {
     notifySubscribers('status-changed', 'pending');
-    setTimeout(createChannel, 3000);
+    setTimeout(createChannel, 2000);
 };
 
 const messageHandler = (e: MessageEvent) => {

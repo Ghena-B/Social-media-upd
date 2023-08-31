@@ -1,5 +1,6 @@
 import React, {useEffect} from "react";
 import User from "./User";
+import s from './Users.module.css'
 import Paginator from "../common/Paginator/Paginator";
 import {FilterUsersForm} from "../Forms/FilterUsersForm";
 import {useDispatch, useSelector} from "react-redux";
@@ -72,8 +73,6 @@ export const Users: React.FC<PropsType> = () => {
 
     }, [filter, currentPage]);
 
-
-
     const onPageChanged = (pageNumber: number | "...") => {
         if (typeof pageNumber === "number") {
             dispatch(requestUsers(pageNumber, pageSize, filter))
@@ -95,7 +94,7 @@ export const Users: React.FC<PropsType> = () => {
                    totalCount={totalUsersCount}
                    pageSize={pageSize}
         />
-        <div>
+        <div className={s.cards}>
             {users.map(u => <User user={u} key={u.id}
                                   followingInProgress={followingInProgress}
                                   follow={handleFollow}

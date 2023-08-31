@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 import LoginForm from "../Forms/LoginForm";
 
 type PropsType = {
@@ -9,7 +9,7 @@ type PropsType = {
     login: (email: string, password: string, rememberMe: boolean, captcha: string) => void;
 };
 
-const Login: React.FC<PropsType> = ({ isAuth, login, errorMessage, captcha }) => {
+const Login: React.FC<PropsType> = ({isAuth, login, errorMessage, captcha}) => {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,9 +21,10 @@ const Login: React.FC<PropsType> = ({ isAuth, login, errorMessage, captcha }) =>
     return (
         <div>
             <h1>Login</h1>
-            <LoginForm login={login} errorMessage={errorMessage} captcha={captcha} />
+            <LoginForm login={login} errorMessage={errorMessage} captcha={captcha}/>
         </div>
     );
 };
 
 export default Login;
+

@@ -1,77 +1,99 @@
 //import logo from './logo.svg';
 import './App.css';
 
-
 import News from "./components/News/News";
 import Music from "./components/Music/Music";
 import Settings from "./components/Settings/Settings";
-import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
+import {BrowserRouter, Navigate, NavLink, Route, Routes} from "react-router-dom";
 import ProfileContainer from "./components/Profile/ProfileContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
-import React, {Component, lazy, Suspense} from "react";
-import {connect, Provider} from "react-redux";
+import React, {lazy, Suspense, useEffect, useState} from "react";
+import {connect, Provider, useDispatch, useSelector} from "react-redux";
 import {initializeApp} from "./redux/app-reducer";
 import {compose} from "redux";
 
 import store, {AppStateType} from "./redux/redux-store";
 import Preloader from "./components/common/Preloader/Preloader";
-import Menu from "./components/Menu/Menu";
 import {chatApi} from "./api/chatApi";
 import Chat from "./components/Chat/Chat";
+import {Layout, theme} from 'antd';
+import MenuOwn from "./components/Menu/Menu";
 
 const UsersPage = lazy(() => import('./components/Users/UsersContainer'));
 const LoginContainer = lazy(() => import('./components/Login/LoginContainer'));
 
-class App extends Component<MapPropsType & DispatchPropsType, any> {
+const {Sider, Content} = Layout;
 
-    componentDidMount() {
-        this.props.initializeApp()
-        chatApi.start()
-    }
+const App: React.FC = () => {
+    const dispatch = useDispatch();
+    const initSuccess = useSelector((state: AppStateType) => state.app.initializeSuccess);
+    const [collapsed, setCollapsed] = useState(false);
+    const {
+        token: {colorBgContainer},
+    } = theme.useToken();
 
-    componentWillUnmount() {
-        chatApi.stop();
-    }
-
-    render() {
-        if (!this.props.initSuccess) {
-            return <Preloader/>
+    useEffect(() => {
+        dispatch(initializeApp());
+        chatApi.start();
+        return () => {
+            chatApi.stop();
         }
-        return (
-            <div className="App">
-                <HeaderContainer/>
-                <Menu/>
-                <div className='main'>
-                    <Suspense fallback={<div>...Loading</div>}>
-                        <Routes>
-                            <Route path="/" element={<Navigate to="/profile"/>}/>
-                            <Route path="/profile/:userId?" element={<ProfileContainer/>}/>
-                            <Route path="/news" element={<News/>}/>
-                            <Route path="/music" element={<Music/>}/>
-                            <Route path="/settings" element={<Settings/>}/>
-                            <Route path="/users" element={<UsersPage/>}/>
-                            <Route path="/login" element={<LoginContainer/>}/>
-                            <Route path="/chat" element={<Chat/>}/>
-                            <Route path="*" element={<div>404 Not found</div>}/>
-                        </Routes>
-                    </Suspense>
-                </div>
-            </div>
-        )
+    }, [dispatch]);
+
+    if (!initSuccess) {
+        return <Preloader/>
     }
+
+    return (<>
+            <Layout>
+                <Sider trigger={null} collapsible collapsed={collapsed}>
+                    <div className="demo-logo-vertical" style={{padding: 16,
+                        background: colorBgContainer,
+                        fontWeight: 700,
+                        fontSize: 24,
+                        color: "#252B42"}}>
+                        <NavLink to="/"> { collapsed ? <div>GN</div> : <div>GNetwork</div>}
+                            </NavLink>
+                    </div>
+                    <MenuOwn collapsed={collapsed}/>
+                </Sider>
+                <Layout>
+                    <HeaderContainer collapsed={collapsed} setCollapsed={setCollapsed}
+                                     colorBgContainer={colorBgContainer}/>
+                    <Content
+                        style={{
+                            margin: '24px 16px',
+                            padding: 24,
+                            minHeight: 280,
+                            background: colorBgContainer,
+                        }}
+                    >
+                        <Suspense fallback={<div>...Loading</div>}>
+                            <Routes>
+                                <Route path="/" element={<Navigate to="/profile"/>}/>
+                                <Route path="/profile/:userId?" element={<ProfileContainer/>}/>
+                                <Route path="/news" element={<News/>}/>
+                                <Route path="/music" element={<Music/>}/>
+                                <Route path="/settings" element={<Settings/>}/>
+                                <Route path="/users" element={<UsersPage/>}/>
+                                <Route path="/login" element={<LoginContainer/>}/>
+                                <Route path="/chat" element={<Chat/>}/>
+                                <Route path="*" element={<div>404 Not found</div>}/>
+                            </Routes>
+                        </Suspense>
+                    </Content>
+                </Layout>
+            </Layout>
+        </>
+
+    )
 }
 
-const mapStateToProps = (state: AppStateType) => {
-    return {
-        initSuccess: state.app.initializeSuccess
-    }
-};
-
 let AppContainer = compose(
-    connect(mapStateToProps, {initializeApp})
+    connect(null, {initializeApp})
 )(App);
 
-let SocialNetworkApp = () => {
+const SocialNetworkApp: React.FC = () => {
     return <BrowserRouter>
         <Provider store={store}>
             <AppContainer/>
@@ -80,9 +102,3 @@ let SocialNetworkApp = () => {
 };
 
 export default SocialNetworkApp;
-
-type MapPropsType = ReturnType<typeof mapStateToProps>
-
-type DispatchPropsType = {
-    initializeApp: () => void
-}

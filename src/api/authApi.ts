@@ -2,17 +2,23 @@ import {ApiResponseType, instance, ResultCodes, ResultCodesWithCaptcha} from "./
 
 export const authApi = {
     authMe() {
-        return instance.get(`auth/me`).then((response: {data: ApiResponseType<ResultCodes, AuthMeApiResponseType>}) => {
+        return instance.get(`auth/me`).then((response: {
+            data: ApiResponseType<ResultCodes, AuthMeApiResponseType>
+        }) => {
             return response.data as ApiResponseType<ResultCodes, AuthMeApiResponseType>
         })
     },
     login(email: string, password: string, rememberMe = false, captcha: string | null = null) {
-        return instance.post(`auth/login`, {email, password, rememberMe, captcha}).then((response: { data: ApiResponseType<ResultCodes | ResultCodesWithCaptcha, LoginApiResponseType> }) => {
+        return instance.post(`auth/login`, {email, password, rememberMe, captcha}).then((response: {
+            data: ApiResponseType<ResultCodes | ResultCodesWithCaptcha, LoginApiResponseType>
+        }) => {
             return response.data as ApiResponseType<ResultCodes | ResultCodesWithCaptcha, LoginApiResponseType>
         })
     },
     logout() {
-        return instance.delete(`auth/login`).then((response: { data: ApiResponseType<{}, ResultCodes>; }) => {
+        return instance.delete(`auth/login`).then((response: {
+            data: ApiResponseType<{}, ResultCodes>;
+        }) => {
             return response.data as ApiResponseType<{}, ResultCodes>
         })
     }

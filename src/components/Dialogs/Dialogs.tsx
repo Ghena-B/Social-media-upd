@@ -71,7 +71,7 @@ const Messages: React.FC = React.memo(() => {
         }
     }, [messages])
 
-    let messagesElement = messages.map((m, index) => <Message message={m.message} key={index} photo={m.photo} userName={m.userName}/>);
+    let messagesElement = messages.map((m, index) => <Message message={m.message} key={index} photo={m.photo} userName={m.userName} isMyMessage={true}/>);
 
     return <div style={{overflowY: 'auto'}} onScroll={scrollHandler} className={s.message}>
         {messagesElement}

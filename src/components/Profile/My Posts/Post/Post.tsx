@@ -1,4 +1,5 @@
 import React from "react";
+import {LikeOutlined} from "@ant-design/icons";
 
 type PropsType = {
     message: string
@@ -6,8 +7,8 @@ type PropsType = {
 }
 const Post: React.FC<PropsType> = (props) => {
     return (
-        <div>{props.message}
-            <div>Likes:{props.likesCount}</div>
+        <div style={{padding: 10}}>{props.message}
+            <div><LikeOutlined /> {props.likesCount}</div>
         </div>
 
 

@@ -70,7 +70,7 @@ export let login = (email: string, password: string, rememberMe: boolean, captch
         if (data.resultCode === ResultCodes.Success) {
             await dispatch(getAuthUserData())
         } else {
-            if (data.resultCode === ResultCodesWithCaptcha.CaptchaIsRequired){
+            if (data.resultCode === ResultCodesWithCaptcha.CaptchaIsRequired) {
                 await dispatch(getCaptchaUrl())
             }
             dispatch(actions.setError(data.messages[0]))
@@ -90,7 +90,7 @@ export let logout = (): ThunkType => {
 export let getCaptchaUrl = (): ThunkType => {
     return async (dispatch) => {
         const data = await securityApi.getCaptchaUrl();
-            dispatch(actions.getCaptchaUrlSuccess(data.data.url))
+        dispatch(actions.getCaptchaUrlSuccess(data.data.url))
     }
 };
 

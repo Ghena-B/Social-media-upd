@@ -7,7 +7,9 @@ type MapStatePropsType = {
     activeUsers: Array<ActiveUsersType>
 }
 type MapDispatchPropsType = {}
-type OwnPropsType = {}
+type OwnPropsType = {
+    collapsed: boolean
+}
 
 const mapStateToProps = (state: AppStateType): MapStatePropsType => {
     return {

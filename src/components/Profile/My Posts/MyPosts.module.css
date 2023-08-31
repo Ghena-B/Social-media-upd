@@ -1,0 +1,12 @@
+.posts {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.posts__addPost {
+
+}
+
+.post {
+    margin-top: 20px;
+}

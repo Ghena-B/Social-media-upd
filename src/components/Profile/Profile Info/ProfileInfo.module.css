@@ -1,23 +1,118 @@
 
+.profileBgImage img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
 
+.profileContent {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.profileHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    column-gap: 20px;
+}
+
+.profileUserPhoto {
+}
+.profileUserPhoto img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    border: 5px solid #fffdfd;
+    margin-top: -40px;
+    margin-left: 40px;
+}
+
+.profileUserStatus {
+    background-color: #fffdfd;
+    padding: 10px;
+    min-width: 300px;
+    max-width: 800px;
+    flex-grow: 8;
+}
+
+.statusTitle {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+.statusText {
+    border: 1px solid #e3e3e3;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: #f2f2f5;
+}
+.profileUserEdit {
+    margin-top: 35px;
+    padding: 10px;
+    align-items: flex-end;
+    min-width: 120px;
+    max-width: 150px;
+}
+
+.profileUserContent {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    column-gap: 30px;
+
+}
+
+.profileUserInfo {
+
+}
+
+.profileUserPosts {
+    flex-grow: 1;
+}
+
+.infoProfile :not(:last-child){
+    padding: 5px;
+
+}
+.contactsProfileTitle {
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.contactsProfile {
+    padding-left: 10px;
+}
+.contactsProfile > div {
+    padding: 5px;
+}
+/*---------------------------------------------*/
 .main__bgImage img {
     width: 100%;
     height: 200px;
     object-fit: cover;
     margin-bottom: 10px;
+    border-radius: 10px;
+
 }
 .profileInfo {
     display: flex;
-    margin-bottom: 50px;
+    width: 90%;
+    margin: 0 auto 50px;
 }
 .profileInfo__image img {
+    border-radius: 50%;
     width: 150px;
     height: 150px;
+    border: 5px solid #fffdfd;
+    margin-top: -40px;
+    margin-left: 40px;
 }
-.infoProfile {
-    margin-left: 20px;
-    flex-direction: column;
-}
+
 .infoProfile__name {
-    margin-bottom: 40px;
+    display: inline-block;
+
 }

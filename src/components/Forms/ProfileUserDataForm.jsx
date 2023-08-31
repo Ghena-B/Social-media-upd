@@ -1,58 +1,78 @@
-import {useForm} from "react-hook-form";
+import React from "react";
+import { useForm, Controller } from "react-hook-form";
+import { Input, Checkbox, Button, Form } from "antd";
 
-const ProfileUserDataForm = ({profile, editModeOff, updateProfileInfo}) => {
-    const {register, handleSubmit, formState: {errors}} = useForm({defaultValues: profile,});
+const ProfileUserDataForm = ({ profile, editModeOff, updateProfileInfo }) => {
+    const { control, handleSubmit, formState: { errors } } = useForm({
+        defaultValues: profile,
+    });
 
     const onSubmit = data => {
         updateProfileInfo(data);
         editModeOff();
-    }
-    return <form onSubmit={handleSubmit(onSubmit)} action="" name='profile-form'>
-        <div>
-            <input {...register('fullName', {
-                required: true,
-            })} type="text" placeholder="Edit your name" name="fullName" />
-            {errors.fullName && (
-                <span>{errors.fullName.message}</span>
-            )}
-        </div>
-        <div>
-            <textarea {...register('aboutMe')} placeholder="Add information here" name="aboutMe" />
-            {errors.aboutMe && (
-                <span>{errors.aboutMe.message}</span>
-            )}
-        </div>
-        <div>
-            <input {...register('lookingForAJob')} type="checkbox" name="lookingForAJob"/>
-            <label>Looking for a job</label>
-        </div>
-        <div>
-            <textarea {...register('lookingForAJobDescription')}
-                   placeholder="Enter your preferences"
-                   name="lookingForAJobDescription" />
-            {errors.lookingForAJobDescription && (
-                <span>{errors.lookingForAJobDescription.message}</span>
-            )}
-        </div>
-        {Object.entries(profile.contacts).map(([name, url]) => (
-            <div key={name}>
-                <input
-                    {...register(`contacts.${name}`, {
-                        pattern: {
-                            value: /^(https?:\/\/)?[a-z0-9]+([-.][a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i,
-                            message: 'Invalid website name',
-                        }
-                    })}
-                    type="text"
-                    placeholder={name}
-                    name={`contacts.${name}`}
+    };
+
+    return (
+        <Form layout="vertical" onFinish={handleSubmit(onSubmit)}>
+            <Form.Item label="Full Name" error={errors.fullName && errors.fullName.message}>
+                <Controller
+                    name="fullName"
+                    control={control}
+                    rules={{ required: "Full name is required" }}
+                    render={({ field }) => <Input {...field} />}
                 />
-                {errors.contacts && errors.contacts[name] && (
-                    <span>{errors.contacts[name].message}</span>
-                )}
-            </div>
-        ))}
-        <button type="submit" >Save changes</button>
-    </form>
+            </Form.Item>
+
+            <Form.Item label="About Me">
+                <Controller
+                    name="aboutMe"
+                    control={control}
+                    render={({ field }) => <Input.TextArea {...field} />}
+                />
+            </Form.Item>
+
+            <Form.Item>
+                <Controller
+                    name="lookingForAJob"
+                    control={control}
+                    render={({ field }) => (
+                        <Checkbox {...field} checked={field.value}>
+                            Looking for a job
+                        </Checkbox>
+                    )}
+                />
+            </Form.Item>
+
+            <Form.Item label="Job Description">
+                <Controller
+                    name="lookingForAJobDescription"
+                    control={control}
+                    render={({ field }) => <Input.TextArea {...field} />}
+                />
+            </Form.Item>
+
+            {Object.entries(profile.contacts).map(([name, url]) => (
+                <Form.Item key={name} label={name}>
+                    <Controller
+                        name={`contacts.${name}`}
+                        control={control}
+                        rules={{
+                            pattern: {
+                                value: /^(https?:\/\/)?[a-z0-9]+([-.][a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i,
+                                message: 'Invalid website name',
+                            }
+                        }}
+                        render={({ field }) => <Input {...field} />}
+                    />
+                    {errors.contacts && errors.contacts[name] && <span>{errors.contacts[name].message}</span>}
+                </Form.Item>
+            ))}
+
+            <Button type="primary" htmlType="submit">
+                Save changes
+            </Button>
+        </Form>
+    );
 };
+
 export default ProfileUserDataForm;

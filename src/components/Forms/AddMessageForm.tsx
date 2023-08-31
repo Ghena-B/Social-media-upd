@@ -1,21 +1,34 @@
-import {useForm} from "react-hook-form";
 import React from "react";
+import { useForm, Controller } from "react-hook-form";
+import { Input, Button, Form } from "antd";
+import {SendOutlined} from "@ant-design/icons";
 
 const AddMessageForm = (props: any) => {
 
-    const {register, handleSubmit, reset} = useForm();
+    const { control, handleSubmit, reset } = useForm();
+
     const onSubmit = (data: any) => {
         const messageObject = { message: data.textMessage, photo: '', userId: 0, userName: 'Name' };
         props.addMessage(messageObject);
         reset();
     };
 
+    return (
+        <Form layout="inline" onFinish={handleSubmit(onSubmit)}>
+            <Form.Item label="Message">
+                <Controller
+                    name="textMessage"
+                    control={control}
+                    render={({ field }) => <Input {...field} placeholder="Message..." style={{width: "100vh"}}/>}
+                />
+            </Form.Item>
+            <Form.Item>
+                <Button type="primary" htmlType="submit" icon={<SendOutlined />}>
+                    Send Message
+                </Button>
+            </Form.Item>
+        </Form>
+    )
+};
 
-    return (<form onSubmit={handleSubmit(onSubmit)} action="">
-        <div>
-            <textarea {...register('textMessage')} placeholder="Message..."/>
-        </div>
-        <button type="submit">Send Message</button>
-    </form>);
-}
 export default AddMessageForm;

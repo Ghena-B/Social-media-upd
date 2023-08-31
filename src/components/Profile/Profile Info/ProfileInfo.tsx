@@ -1,9 +1,13 @@
-import s from './ProfileInfo.module.css';
+import s from '../Profile Info/ProfileInfo.module.css';
 import Preloader from "../../common/Preloader/Preloader";
 import ProfileStatusWithHooks from "./Profile Status/ProfileStatusWithHooks";
 import React, {ChangeEvent, useEffect, useState} from "react";
 import ProfileUserDataForm from "../../Forms/ProfileUserDataForm";
 import {ProfileType} from "../../../APItypes/APItypes";
+import {Button, Card, Input} from "antd";
+import MyPostsContainer from "../My Posts/MyPostsContainer";
+import {AuditOutlined, ClusterOutlined, InfoOutlined, MonitorOutlined, NotificationOutlined} from "@ant-design/icons";
+
 type PropsType = {
     profile: ProfileType | null
     status: string
@@ -29,24 +33,42 @@ const ProfileInfo: React.FC<PropsType> = (props) => {
         return <Preloader/>
     }
     return <div>
-        <div className={s.main__bgImage}>
+        <div className={s.profileBgImage}>
             <img
                 src="https://i0.wp.com/www.flutterbeads.com/wp-content/uploads/2022/01/add-image-in-flutter-hero.png?fit=2850%2C1801&ssl=1"
                 alt=""/>
         </div>
-        <div className={s.profileInfo}>
-            <ProfileUserImage updateProfilePhoto={updateProfilePhoto}
-                              isOwner={isOwner}
-                              profile={profile}/>
-            <div className={`${s.profileInfo__info} ${s.infoProfile}`}>
-                <ProfileStatusWithHooks status={status}
-                                        updateStatus={updateStatus}
-                                        isOwner={isOwner}/>
-                {!editMode ? <ProfileUserData profile={profile}/> :
-                    <ProfileUserDataForm profile={profile} editModeOff={editModeOff}
-                                         updateProfileInfo={updateProfileInfo}/>}
-                {!editMode && <ProfileUserContacts profile={profile}/>}
-                {isOwner && !editMode && <button onClick={editModeOn}>Update</button>}
+        <div className={s.profileContent}>
+            <div className={s.profileHeader}>
+                <div className={s.profileUserPhoto}>
+                    <ProfileUserImage updateProfilePhoto={updateProfilePhoto}
+                                      isOwner={isOwner}
+                                      profile={profile}/>
+                </div>
+                <div className={s.profileUserStatus}>
+                    <ProfileStatusWithHooks status={status}
+                                            updateStatus={updateStatus}
+                                            isOwner={isOwner}/>
+                </div>
+                <div className={s.profileUserEdit}>
+                    {isOwner && !editMode && <Button onClick={editModeOn}>Update Profile</Button>}
+                </div>
+            </div>
+            <hr/>
+            <div className={s.profileUserContent}>
+                <div className={s.profileUserInfo}>
+                    <Card title="Profile Presentation" style={{ width: 500 }}>
+                    {!editMode ?
+                        <ProfileUserData profile={profile}/> :
+                        <ProfileUserDataForm profile={profile}
+                                             editModeOff={editModeOff}
+                                             updateProfileInfo={updateProfileInfo}/>}
+                    {!editMode && <ProfileUserContacts profile={profile}/>}
+                    </Card>
+                </div>
+                <div className={s.profileUserPosts}>
+                    {props.isOwner && <MyPostsContainer isOwner={props.isOwner}/>}
+                </div>
             </div>
         </div>
     </div>
@@ -57,35 +79,42 @@ type ProfileUserDataType = {
     profile: ProfileType
 }
 const ProfileUserData: React.FC<ProfileUserDataType> = ({profile}) => {
-    return <div>
-        <div className={s.infoProfile__name}>Name: {profile.fullName}</div>
-        <div className={s.infoProfile__about}>About me: {profile.aboutMe}</div>
-        <div className={s.infoProfile__job}>Looking for a job: {profile["lookingForAJob"] ? "Yes" : "No"}</div>
-        <div className={s.infoProfile__job}>Job description: {profile.lookingForAJobDescription}</div>
+    return <div className={s.infoProfile}>
+            <div><AuditOutlined style={{ fontSize: '25px'}}/>
+                <span className={s.infoProfile__name}><strong>Name:</strong> {profile.fullName}</span></div>
+            <div><NotificationOutlined style={{ fontSize: '25px'}}/><span className={s.infoProfile__about}><strong>About me:</strong> {profile.aboutMe}</span></div>
+            <div><MonitorOutlined style={{ fontSize: '25px'}}/><span className={s.infoProfile__job}><strong>Looking for a job:</strong> {profile["lookingForAJob"] ? "Yes" : "No"}</span></div>
+            <div><InfoOutlined style={{ fontSize: '25px'}}/><span className={s.infoProfile__job}><strong>Job description:</strong> {profile.lookingForAJobDescription}</span></div>
     </div>
 };
 
 type ProfileUserContactsType = {
     profile: ProfileType
 }
+
 const ProfileUserContacts: React.FC<ProfileUserContactsType> = ({profile}) => {
     if (!profile.contacts) {
         return null;
     }
+    const validContacts = Object.entries(profile.contacts).filter(([_, value]) => value !== null);
 
-    let contactsElement = Object.entries(profile.contacts);
-    return <div>
-        {contactsElement.map(([key, value]) => {
-            if (value === null) {
-                return null;
-            }
-            return (<div key={key}>
-                <strong>{key}: </strong>
-                <span><a href={value}>{value}</a></span>
-            </div>)
-        })}
-    </div>
+    if (validContacts.length === 0) {
+        return null;
+    }
+
+    return (
+        <div className={s.contactsProfile}>
+            <div className={s.contactsProfileTitle}>Find me on: </div>
+            {validContacts.map(([key, value]) => (
+                <div key={key}>
+                    <strong>{key}: </strong>
+                    <span><a href={value}>{value}</a></span>
+                </div>
+            ))}
+        </div>
+    );
 };
+
 
 type ProfileUserImageType = {
     profile: ProfileType
@@ -100,13 +129,15 @@ const ProfileUserImage: React.FC<ProfileUserImageType> = ({profile, updateProfil
     };
     const defaultImageURL = 'https://www.asiamediajournal.com/wp-content/uploads/2022/11/Default-PFP-1200x1200.jpg';
     const profileImageURL = profile.photos?.large || defaultImageURL;
-    return <div>
-        <div className={s.profileInfo__image}>
-            <img
-                src={profileImageURL}
-                alt=""/>
+    return <>
+        <div>
+            <div>
+                <img
+                    src={profileImageURL}
+                    alt=""/>
+            </div>
+            <div>{isOwner && <div><div>Change photo</div><Input type="file" style={{ width: '250px' }} onChange={handleFileChange}/></div>}</div>
         </div>
-        <div>{isOwner && <input type="file" onChange={handleFileChange}/>}</div>
-    </div>
+    </>
 };
 

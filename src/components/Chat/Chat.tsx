@@ -6,6 +6,7 @@ import {ChatMessageAPIType} from "../../api/chatApi";
 import AddMessageForm from "../Forms/AddMessageForm";
 import Message from "../Dialogs/Message/Message";
 import s from "../Dialogs/Dialogs.module.css";
+import {withAuthRedirect} from "../../hoc/AuthRedirect";
 
 const Chat: React.FC = () => {
     const dispatch = useDispatch();
@@ -25,22 +26,22 @@ const Chat: React.FC = () => {
     };
 
     return (
-        <div>
+        <div className={s.chat}>
             {status === 'error' && <div>Some error occurred. Please refresh the page</div>}
 
-            <Messages/>
-            <AddMessageForm addMessage={addMessage}/>
+            <div><Messages/></div>
+            <div className={s.form}><AddMessageForm addMessage={addMessage}/></div>
         </div>
     );
 };
 
-export default Chat;
+export default withAuthRedirect(Chat);
 
 const Messages: React.FC = React.memo(() => {
     const messages: ChatMessageAPIType[] = useSelector((state: AppStateType) => state.chatPage.messages)
     const messagesAnchorRef = useRef<HTMLDivElement>(null);
     const [isAutoScroll, setIsAutoScroll] = useState(true)
-
+    const authUserId = useSelector((state: AppStateType) => state.auth.userId)
     const scrollHandler = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
         const element = e.currentTarget;
         if (Math.abs((element.scrollHeight - element.scrollTop) - element.clientHeight) < 300) {
@@ -60,7 +61,10 @@ const Messages: React.FC = React.memo(() => {
         message={m.message}
         key={index}
         photo={m.photo}
-        userName={m.userName}/>);
+        userName={m.userName}
+        isMyMessage={m.userId === authUserId}
+    />);
+
 
     return <div style={{overflowY: 'auto'}} onScroll={scrollHandler} className={s.message}>
         {messagesElement}

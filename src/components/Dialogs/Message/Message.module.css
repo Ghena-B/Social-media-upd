@@ -1,8 +1,10 @@
-.message {
+
+.container {
     display: flex;
+    column-gap: 10px;
     align-items: flex-end;
-    column-gap: 3px;
-    margin: 20px 15px;
+    margin: 20px;
+
 }
 .image img {
     width: 30px;
@@ -10,8 +12,20 @@
     object-fit: cover;
     border-radius: 50%;
 }
-.text {
-    background-color: #fff;
+.box {
+    display: flex;
+    flex-direction: column;
+    background-color: #f1f1f1;
     border-radius: 8px;
-    padding: 4px;
+    padding: 5px;
+    min-width: 200px;
+    max-width: 400px;
+}
+
+.user {
+    font-weight: 500;
+}
+
+.myMessage {
+    flex-direction: row-reverse;
 }

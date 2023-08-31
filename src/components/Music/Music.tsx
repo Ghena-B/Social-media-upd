@@ -1,8 +1,11 @@
 import React from "react";
+import NoData from "../common/NoData/NoData";
 
 const Music: React.FC = () => {
     return (
-        <div>Music</div>
+        <div>
+            <NoData/>
+        </div>
     )
 };
 export default Music;

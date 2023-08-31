@@ -1,4 +1,6 @@
+import s from '../ProfileInfo.module.css';
 import React, {ChangeEvent, useEffect, useState} from "react";
+import {Input} from "antd";
 
 type PropsType = {
     status: string
@@ -24,13 +26,14 @@ const ProfileStatusWithHooks: React.FC<PropsType> = (props) => {
         setStatus(e.currentTarget.value)
     };
 
-    return (<div>
-        {!editMode && <div onDoubleClick={props.isOwner ? editModeOn : undefined}>status: {status || "----"}</div>}
+    return <div>
+        <div className={s.statusTitle}>Status</div>
+        {!editMode && <div className={s.statusText} onDoubleClick={props.isOwner ? editModeOn : undefined}>{status || "----"}</div>}
         {editMode && <div>
-            <input onChange={onStatusChange} type="text" value={status}
+            <Input onChange={onStatusChange} type="text" value={status}
                    onBlur={editModeOff} autoFocus={true}/>
         </div>}
-    </div>);
+    </div>;
 }
 export default ProfileStatusWithHooks;
 
