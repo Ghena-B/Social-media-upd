@@ -1,0 +1,15 @@
+
+.responsiveInput {
+    width: 100%;
+}
+
+.responsiveButton {
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .responsiveButton {
+        width: auto;
+        margin-top: 0;
+    }
+}

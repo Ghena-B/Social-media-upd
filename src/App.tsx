@@ -4,7 +4,7 @@ import './App.css';
 import News from "./components/News/News";
 import Music from "./components/Music/Music";
 import Settings from "./components/Settings/Settings";
-import {BrowserRouter, Navigate, NavLink, Route, Routes} from "react-router-dom";
+import {HashRouter as Router, Navigate, NavLink, Route, Routes} from "react-router-dom";
 import ProfileContainer from "./components/Profile/ProfileContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
 import React, {lazy, Suspense, useEffect, useState} from "react";
@@ -27,7 +27,7 @@ const {Sider, Content} = Layout;
 const App: React.FC = () => {
     const dispatch = useDispatch();
     const initSuccess = useSelector((state: AppStateType) => state.app.initializeSuccess);
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(window.innerWidth < 833);
     const {
         token: {colorBgContainer},
     } = theme.useToken();
@@ -39,6 +39,22 @@ const App: React.FC = () => {
             chatApi.stop();
         }
     }, [dispatch]);
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 833) {
+                setCollapsed(true);
+            } else {
+                setCollapsed(false);
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     if (!initSuccess) {
         return <Preloader/>
@@ -94,11 +110,11 @@ let AppContainer = compose(
 )(App);
 
 const SocialNetworkApp: React.FC = () => {
-    return <BrowserRouter>
+    return <Router>
         <Provider store={store}>
             <AppContainer/>
         </Provider>
-    </BrowserRouter>
+    </Router>
 };
 
 export default SocialNetworkApp;

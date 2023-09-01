@@ -6,7 +6,7 @@ import ProfileUserDataForm from "../../Forms/ProfileUserDataForm";
 import {ProfileType} from "../../../APItypes/APItypes";
 import {Button, Card, Input} from "antd";
 import MyPostsContainer from "../My Posts/MyPostsContainer";
-import {AuditOutlined, ClusterOutlined, InfoOutlined, MonitorOutlined, NotificationOutlined} from "@ant-design/icons";
+import {AuditOutlined, InfoOutlined, MonitorOutlined, NotificationOutlined} from "@ant-design/icons";
 
 type PropsType = {
     profile: ProfileType | null
@@ -56,8 +56,7 @@ const ProfileInfo: React.FC<PropsType> = (props) => {
             </div>
             <hr/>
             <div className={s.profileUserContent}>
-                <div className={s.profileUserInfo}>
-                    <Card title="Profile Presentation" style={{ width: 500 }}>
+                    <Card title="Profile Presentation" className={s.profileUserInfo}>
                     {!editMode ?
                         <ProfileUserData profile={profile}/> :
                         <ProfileUserDataForm profile={profile}
@@ -65,7 +64,6 @@ const ProfileInfo: React.FC<PropsType> = (props) => {
                                              updateProfileInfo={updateProfileInfo}/>}
                     {!editMode && <ProfileUserContacts profile={profile}/>}
                     </Card>
-                </div>
                 <div className={s.profileUserPosts}>
                     {props.isOwner && <MyPostsContainer isOwner={props.isOwner}/>}
                 </div>

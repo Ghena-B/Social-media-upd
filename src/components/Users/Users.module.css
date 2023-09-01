@@ -61,3 +61,12 @@
     height: 40px;
 }
 
+@media (max-width: 833px) {
+    .card {
+        width: 250px;
+        height: 340px;
+    }
+    .status {
+        font-size:12px;
+    }
+}

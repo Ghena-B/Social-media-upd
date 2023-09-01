@@ -16,9 +16,18 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    column-gap: 20px;
+    column-gap: 10px;
 }
 
+@media (max-width: 992px) {
+    .profileHeader, .profileUserContent{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .profileUserContent {
+
+    }
+}
 .profileUserPhoto {
 }
 .profileUserPhoto img {
@@ -52,6 +61,7 @@
 }
 .profileUserEdit {
     margin-top: 35px;
+    margin-right: 5px;
     padding: 10px;
     align-items: flex-end;
     min-width: 120px;
@@ -64,10 +74,17 @@
     justify-content: space-between;
     column-gap: 30px;
 
+
 }
 
 .profileUserInfo {
-
+    width: 400px;
+    margin-bottom: 20px;
+}
+@media (max-width: 992px) {
+    .profileUserInfo {
+        width: 300px;
+    }
 }
 
 .profileUserPosts {

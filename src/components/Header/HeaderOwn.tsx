@@ -46,8 +46,8 @@ const HeaderOwn: React.FC<PropsType> = (props) => {
     }, []);
     return (
         <Header style={{padding: 0, background: props.colorBgContainer}}>
-            <Row>
-                <Col span={2}>
+            <Row gutter={22} justify="space-between" align="middle" style={{ display: 'flex' }}>
+                <Col className="gutter-row" lg={2} sm={2}>
                     <Button
                         type="text"
                         icon={props.collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
@@ -59,26 +59,27 @@ const HeaderOwn: React.FC<PropsType> = (props) => {
                         }}
                     />
                 </Col>
-                <Col style={{flex: 1}}>
+                <Col lg={20} className="gutter-row" >
                     {location.pathname !== '/users' &&
                         <FilterUsersForm onFilterChanged={onFilterChanged}
                                          redirectOnSubmit={true}/>}
                 </Col>
                 {props.isAuthorized ?
-                    <Col span={2} style={{paddingRight: 20}}>
+                    <Col className="gutter-row" lg={2} sm={1} style={{ display: 'flex', justifyContent: 'flex-end', paddingRight: 30 }}>
                         <Button type="default"
                                 shape="round"
                                 size={"large"}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setIsCardVisible(!isCardVisible);
-                                }}>
-                            <Avatar size='small'
+                                }}
+                        style={{display: "flex", alignItems: "center", position: "relative"}}>
+                            <Avatar size='default'
                                     src={profileImageURL}/>
                             <SettingOutlined/>
                         </Button>
                         {isCardVisible &&
-                            <Card style={{width: 300, marginTop: 10, marginRight: 16, float: 'right'}}
+                            <Card style={{width: 300, marginTop: 50, marginRight: 16, float: 'right', zIndex: "999", position: "absolute"}}
                                   ref={cardRef}>
                                 <Meta
                                     avatar={<Avatar size={'large'} src={profileImageURL}/>}

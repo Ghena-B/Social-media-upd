@@ -41,7 +41,7 @@ export const FilterUsersForm = (props: any) => {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <Row gutter={22}>
-                <Col className="gutter-row" span={5} >
+                <Col className="gutter-row" sm={7} >
                     <Controller
                         name="term"
                         control={control}
@@ -55,7 +55,7 @@ export const FilterUsersForm = (props: any) => {
                         )}
                     />
                 </Col>
-                <Col className="gutter-row">
+                <Col className="gutter-row" >
                     <Controller
                         name="friend"
                         control={control}
@@ -74,10 +74,11 @@ export const FilterUsersForm = (props: any) => {
                         )}
                     />
                 </Col>
-                <Col className="gutter-row" >
+                <Col className="gutter-row"  style={{display: "flex", alignItems: "center"}}>
                     <Button type="primary" shape="circle" icon={<SearchOutlined />} htmlType="submit"></Button>
                 </Col>
             </Row>
         </form>
+
     );
 }

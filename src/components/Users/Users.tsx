@@ -90,9 +90,9 @@ export const Users: React.FC<PropsType> = () => {
     return (<div>
         <FilterUsersForm onFilterChanged={onFilterChanged}/>
         <Paginator onPageChange={onPageChanged}
-                   currentPage={currentPage}
-                   totalCount={totalUsersCount}
-                   pageSize={pageSize}
+                        currentPage={currentPage}
+                        totalCount={totalUsersCount}
+                        pageSize={pageSize}
         />
         <div className={s.cards}>
             {users.map(u => <User user={u} key={u.id}
